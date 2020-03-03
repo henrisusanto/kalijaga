@@ -9,6 +9,7 @@ class Kemampuans extends MY_Model {
       (object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'nama', 'sTitle' => 'Nama'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Prosentase'),
+      (object) array('mData' => 'per_jamaah', 'sTitle' => 'Per Jamaah'),
     );
     $this->form = array (
         array (
@@ -33,7 +34,11 @@ class Kemampuans extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.orders")
       ->select('kemampuan.nama')
-      ->select("CONCAT(prosentase, ' %') prosentase", false);
+      ->select("CONCAT(prosentase, ' %') prosentase", false)
+      ->select("CONCAT(FORMAT(prosentase / COUNT(jamaah.uuid), 2), ' %') per_jamaah", false)
+      ->join('jamaah', 'jamaah.kemampuan = kemampuan.uuid', 'left')
+      ->group_by("{$this->table}.uuid")
+      ;
     return parent::dt();
   }
 

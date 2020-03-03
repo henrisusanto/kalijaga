@@ -99,6 +99,9 @@ function formInit (scope) {
   scope.find('[data-number="true"]').keyup(function () {
     $(this).val(currency(getNumber($(this))))
   })
+  scope.find('[data-number="true"]').each(function (){
+    $(this).val(currency(getNumber($(this))))
+  })
   calculateTotal (scope)
 }
 
