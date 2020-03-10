@@ -15,7 +15,7 @@ class StrukDetails extends MY_Model {
         'name' => 'infaq',
         'label'=> 'Infaq',
         'options' => array(),
-        'width' => 3,
+        'width' => 4,
         'attributes' => array(
           array('data-autocomplete' => 'true'),
           array('data-model' => 'Infaqs'),
