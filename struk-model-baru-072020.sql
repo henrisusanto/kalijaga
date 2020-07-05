@@ -10,9 +10,11 @@ SELECT
 	, '' AS 'KEBUTUHAN DAERAH'
 	, '' AS 'PPG'
 	, (SELECT strukdetail.dibulatkan FROM strukdetail, jatahdesadetail WHERE strukdetail.jatahDesaDetail = jatahdesadetail.uuid AND strukdetail.struk = struk.uuid  AND jatahdesadetail.infaq = 'cb46ffbc-c62a-11e9-94b3-af3d22f46108') 'KEBUTUHAN DESA'
+	, 0 AS 'AGHNIYA DESA'
 	, (SELECT strukdetail.dibulatkan FROM strukdetail, jatahdesadetail WHERE strukdetail.jatahDesaDetail = jatahdesadetail.uuid AND strukdetail.struk = struk.uuid  AND jatahdesadetail.infaq = 'cb470318-c62a-11e9-94b3-af3d22f46108') 'KEBUTUHAN KELOMPOK'
-	, '' AS 'AGHNIYA DESA'
 	, (SELECT strukdetail.dibulatkan FROM strukdetail, jatahdesadetail WHERE strukdetail.jatahDesaDetail = jatahdesadetail.uuid AND strukdetail.struk = struk.uuid  AND jatahdesadetail.infaq = 'cb470174-c62a-11e9-94b3-af3d22f46108') 'MT KELOMPOK'
+	, '=SUM(C2:M2)' SUBTOTAL
+	, '' TOTAL
 FROM struk
 LEFT JOIN jamaah ON jamaah.`uuid` = struk.jamaah
 LEFT JOIN jatahdesa ON struk.jatahDesa = jatahdesa.`uuid`
