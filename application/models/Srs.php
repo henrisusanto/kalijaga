@@ -41,10 +41,28 @@ class Srs extends MY_Model
         $this->datatables
             ->select("{$this->table}.uuid")
             ->select("{$this->table}.orders")
-            ->select("{$this->table}.kesanggupan")
-            ->select('jamaah.nama')
+            ->select("FORMAT({$this->table}.kesanggupan, 0) kesanggupan", false)
+            ->select('jamaah.nama jamaah', false)
             ->join('jamaah', 'jamaah.uuid = sr.jamaah', 'left')
             ->group_by("{$this->table}.uuid");
         return parent::dt();
+    }
+
+    function prepare_penjatahan ()
+    {
+        $this->load->model('Infaqs');
+        $sr = $this->Infaqs->findOne(array(
+            'nama' => 'SR'
+        ));
+        $all = parent::find();
+        $data= array();
+        foreach ($all as $jatah)
+        {
+            $data[$jatah->jamaah] = $jatah->kesanggupan;
+        }
+        return array(
+            'sr_uuid' => $sr['uuid'],
+            'data' => $data
+        );
     }
 }

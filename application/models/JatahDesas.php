@@ -80,7 +80,8 @@ class JatahDesas extends MY_Model {
 
   function generateStruk ($jatahDesaUuid)
   {
-    $this->load->model(array('Struks', 'JatahDesaDetails', 'StrukDetails'));
+    $this->load->model(array('Struks', 'JatahDesaDetails', 'StrukDetails', 'SRs'));
+    $data_sr = $this->SRs->prepare_penjatahan();
     $collectJamaah = $this->db->query("
       SELECT
         jamaah.uuid,
@@ -116,12 +117,22 @@ class JatahDesas extends MY_Model {
           ));
           else continue;
         }
+        else if ($detail->infaq === $data_sr['sr_uuid'])
+        {
+          $kesanggupan = isset ($data_sr['data'][$jamaah->uuid]) ? $data_sr['data'][$jamaah->uuid] : 0;
+          $this->StrukDetails->create(array(
+            'struk' => $strukUuid,
+            'jatahdesadetail' => $detail->uuid,
+            'dijatah' => $kesanggupan,
+            'dibulatkan' => $kesanggupan
+          )); 
+        }
         else $this->StrukDetails->create(array(
-          'struk' => $strukUuid,
-          'jatahdesadetail' => $detail->uuid,
-          'dijatah' => $jamaah->prosentase / 100 * $detail->nominal / $jamaah->jamaah_sekemampuan,
-          'dibulatkan' => (int) (1000 * ceil($jamaah->prosentase / 100 * $detail->nominal / $jamaah->jamaah_sekemampuan / 1000))
-        ));
+            'struk' => $strukUuid,
+            'jatahdesadetail' => $detail->uuid,
+            'dijatah' => $jamaah->prosentase / 100 * $detail->nominal / $jamaah->jamaah_sekemampuan,
+            'dibulatkan' => (int) (1000 * ceil($jamaah->prosentase / 100 * $detail->nominal / $jamaah->jamaah_sekemampuan / 1000))
+          ));
       }
     }
   }
